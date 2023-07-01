@@ -33,22 +33,21 @@ public class Main {
         Task task = new Task(array);
         ExecutorService executor = Executors.newFixedThreadPool(2);
         int futureSum = 0;
-        Future<String> future = executor.submit(() -> {
+        Future<Integer> future = executor.submit(() -> {
             int total = 0;
             for (int i=1_999_999; i >= 1_000_000; i--) {
                 total = total + array[i];
             }
-            String s =Integer.toString(total);
+            Integer s = Integer.valueOf(total);
             return s;
         });
+        int total = 0;
+        for (int i=0; i <= 999_999; i++) {
+            total = total + array[i];
+        }
         while(!future.isDone()) {
             try {
-                String s = future.get();
-                futureSum = Integer.parseInt(s);
-                int total = 0;
-                for (int i=0; i <= 999_999; i++) {
-                    total = total + array[i];
-                }
+                futureSum = future.get();
                 int sum = total + futureSum;
                 System.out.println(sum);
             } catch (InterruptedException | ExecutionException e) {
